@@ -73,6 +73,7 @@
     0.278413,
     -1.3e-05
   ],
+  "actuator_kv_scale": 10.0,
   "sim_dt": 0.001,
   "control_dt": 0.01
 }

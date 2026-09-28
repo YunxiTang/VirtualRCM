@@ -122,7 +122,7 @@ home insertion depth.
 | mode | behaviour |
 |---|---|
 | `kinematic` | the QP joint velocity is integrated directly, so the RCM error reflects only the controller; used for analysis and tests |
-| `dynamic` | joint velocities become position set-points for the MuJoCo actuators and the model is stepped with `mj_step`, so actuator tracking error shows up as RCM drift that the feedback term has to correct |
+| `dynamic` | joint velocities become position set-points for the MuJoCo actuators and the model is stepped with `mj_step`, so actuator tracking error shows up as RCM drift that the feedback term has to correct. The set-points include gravity, velocity and acceleration feed-forward (`SimConfig.acceleration_feedforward`); soft servos can be stiffened per robot with `actuator_kv_scale` in the config (10 for the Flexiv) |
 
 ## Library
 

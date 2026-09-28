@@ -79,6 +79,9 @@ class Robot:
             jid = int(self.model.actuator_trnid[act, 0])
             if jid < n_arm:
                 self.arm_actuator_ids[jid] = act
+        # position actuators: force = kp (ctrl - q) - kv qdot, with kv = -biasprm[2]
+        acts = self.arm_actuator_ids[self.arm_actuator_ids >= 0]
+        self.model.actuator_biasprm[acts, 2] *= spec.actuator_kv_scale
 
         self.joint_lower = np.array([self.model.jnt_range[j][0] for j in range(n_arm)])
         self.joint_upper = np.array([self.model.jnt_range[j][1] for j in range(n_arm)])

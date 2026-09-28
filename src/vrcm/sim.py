@@ -41,6 +41,10 @@ class SimConfig:
     #: set-points, so that the actuators behave like a gravity-compensated robot
     #: instead of sagging under their own weight.
     gravity_feedforward: bool = True
+    #: dynamic mode: also feed the inertial torque ``M qddot`` forward, with
+    #: ``qddot`` the change from the measured to the commanded joint velocity over
+    #: one control step.  Removes most of the velocity lag of soft servos.
+    acceleration_feedforward: bool = True
     #: dynamic mode: settle time (s) applied in :meth:`reset`.
     settle_time: float = 0.2
 
@@ -149,8 +153,16 @@ class VrcmSim:
         tau = tau - gravcomp  # Flexiv links already carry gravcomp="1"
         kp = self.model.actuator_gainprm[self.robot.arm_actuator_ids, 0]
         kv = -self.model.actuator_biasprm[self.robot.arm_actuator_ids, 2]
-        velocity_term = 0.0 if qdot_des is None else kv * np.asarray(qdot_des, dtype=float)
-        ctrl = ctrl + (tau + velocity_term) / kp
+        if qdot_des is not None:
+            qdot_des = np.asarray(qdot_des, dtype=float)
+            tau = tau + kv * qdot_des
+            if self.config.acceleration_feedforward:
+                dofs = self.robot._arm_dof_adr
+                mass = np.zeros((self.model.nv, self.model.nv))
+                mujoco.mj_fullM(self.model, self.data, mass)
+                qddot = (qdot_des - self.data.qvel[dofs]) / self.config.control_dt
+                tau = tau + mass[np.ix_(dofs, dofs)] @ qddot
+        ctrl = ctrl + tau / kp
         lower = self.model.actuator_ctrlrange[acts, 0]
         upper = self.model.actuator_ctrlrange[acts, 1]
         limited = self.model.actuator_ctrllimited[acts].astype(bool)

@@ -94,6 +94,9 @@ class RobotSpec:
     base_pos: tuple[float, float, float] = (0.0, 0.0, 0.0)
     base_quat: tuple[float, float, float, float] = (1.0, 0.0, 0.0, 0.0)
     joint_velocity_limits: tuple[float, ...] | None = None
+    #: Multiplies the damping ``kv`` of the arm's position actuators (dynamic mode).
+    #: Applied to the compiled model, so the upstream MJCF stays untouched.
+    actuator_kv_scale: float = 1.0
     sim_dt: float = 0.001
     control_dt: float = 0.01
     description: str = ""
