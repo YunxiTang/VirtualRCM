@@ -1,0 +1,81 @@
+<!--
+  Tom / Maryland dissector instrument (SAS-Sim assets, MIT License, (c) 2025 Yunxi Tang).
+
+  This file is written as a *fragment*: the single <body name="instrument_base">
+  below is inserted into the tool-flange body of a robot by vrcm.scene.
+  It is also a valid standalone MuJoCo model, so it can be opened on its own with
+  the MuJoCo viewer (python -m mujoco.viewer).
+
+  Geometry convention (identical to the source URDF gripper.urdf):
+    * +z  = instrument shaft axis, from the flange (z = 0) towards the tip
+    * z = 0.30 m = jaw pivot, i.e. the instrument "tip" used as the RCM reference point
+    * jaws rotate about +/-y and are coupled by an equality constraint (URDF mimic joint)
+
+  Inertias are taken from the URDF. The jaw inertia is deliberately inflated and
+  armature is added: the raw URDF values (~2e-9 kg m^2 for a 51 g jaw) make the
+  hinge numerically stiff without any physical benefit.
+-->
+<mujoco model="tom_dissector">
+  <compiler angle="radian" meshdir="meshes" autolimits="true"/>
+
+  <asset>
+    <material name="td_metal" rgba="0.70 0.70 0.70 1" specular="0.6" shininess="0.5"/>
+    <material name="td_rubber" rgba="0.10 0.10 0.10 1" specular="0.2" shininess="0.1"/>
+    <mesh name="td_base_mesh" file="base_link.STL"/>
+    <mesh name="td_jaw_a_mesh" file="gripper_link.STL"/>
+    <mesh name="td_jaw_b_mesh" file="mimic_Link.STL"/>
+  </asset>
+
+  <worldbody>
+    <body name="instrument_base">
+      <!-- base_link: flange adapter + housing + shaft, 0 <= z <= 0.302 m -->
+      <inertial pos="-0.000108988 0.015063735 0.034737922" mass="0.12619710"
+        fullinertia="0.000126380 0.000091439 0.000077150 -0.000000011 0.000000278 0.000001208"/>
+
+      <geom name="td_housing_visual" type="mesh" mesh="td_base_mesh" material="td_metal"
+        contype="0" conaffinity="0" group="2"/>
+      <geom name="td_housing_collision" type="cylinder" size="0.050 0.035" pos="0 0 0.035"
+        group="3" rgba="0.70 0.70 0.70 0.3"/>
+      <!-- thin shaft: 5 mm diameter tube running from the housing to the jaw pivot -->
+      <geom name="td_shaft_collision" type="capsule" fromto="0 0 0.080 0 0 0.295" size="0.0035"
+        group="3" rgba="0.70 0.70 0.70 0.3"/>
+
+      <site name="instrument_base" pos="0 0 0" size="0.002" rgba="0.2 0.2 1 0.5" group="4"/>
+      <site name="instrument_tip" pos="0 0 0.30" size="0.002" rgba="1 0.2 0.2 0.5" group="4"/>
+      <site name="instrument_shaft_mid" pos="0 0 0.19" size="0.0015" group="4"/>
+
+      <!-- jaw_a: URDF gripper_link, hinge about +y at the jaw pivot -->
+      <body name="jaw_a" pos="0 0 0.30">
+        <inertial pos="0.0000786 -0.0005493 0.0037380" mass="0.05136887"
+          diaginertia="0.0000005 0.0000005 0.0000005"/>
+        <joint name="jaw_a_joint" type="hinge" axis="0 1 0" range="0 0.5"
+          armature="0.00001" damping="0.002" frictionloss="0.001"/>
+        <geom name="td_jaw_a_visual" type="mesh" mesh="td_jaw_a_mesh" material="td_rubber"
+          contype="0" conaffinity="0" group="2"/>
+        <geom name="td_jaw_a_collision" type="mesh" mesh="td_jaw_a_mesh" group="3"/>
+        <site name="jaw_a_tip" pos="0 0 0.023" size="0.001" group="4"/>
+      </body>
+
+      <!-- jaw_b: URDF mimic_Link, mirrored motion enforced by the equality constraint below -->
+      <body name="jaw_b" pos="0 0 0.30">
+        <inertial pos="-0.0000784 0.0005498 0.0037380" mass="0.05136882"
+          diaginertia="0.0000005 0.0000005 0.0000005"/>
+        <joint name="jaw_b_joint" type="hinge" axis="0 1 0" range="-0.5 0"
+          armature="0.00001" damping="0.002" frictionloss="0.001"/>
+        <geom name="td_jaw_b_visual" type="mesh" mesh="td_jaw_b_mesh" material="td_rubber"
+          contype="0" conaffinity="0" group="2"/>
+        <geom name="td_jaw_b_collision" type="mesh" mesh="td_jaw_b_mesh" group="3"/>
+        <site name="jaw_b_tip" pos="0 0 0.023" size="0.001" group="4"/>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <position name="jaw_a" joint="jaw_a_joint" kp="0.5" kv="0.01" ctrlrange="0 0.5"/>
+  </actuator>
+
+  <equality>
+    <!-- jaw_b_joint = -jaw_a_joint  (URDF mimic joint, multiplier -1) -->
+    <joint name="jaw_mimic" joint1="jaw_a_joint" joint2="jaw_b_joint" polycoef="0 -1 0 0 0" solref="0.005 1"/>
+  </equality>
+</mujoco>

@@ -1,0 +1,76 @@
+{
+  "name": "ur5e",
+  "description": "Universal Robots UR5e (6 DOF) from MuJoCo Menagerie, carrying the SAS-Sim tom_dissector instrument. The instrument is bolted to the URDF tool0 frame (menagerie 'attachment_site' at wrist_3_link).",
+  "robot_xml": "assets/robots/ur5e/ur5e.xml",
+  "flange_body": "wrist_3_link",
+  "instrument": {
+    "xml": "assets/instruments/tom_dissector/instrument.xml",
+    "mount_pos": [
+      0.0,
+      0.1,
+      0.0
+    ],
+    "mount_quat": [
+      -1.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    "nominal_length": 0.3,
+    "shaft_radius": 0.0035,
+    "min_insertion": 0.06,
+    "max_insertion": 0.25,
+    "insertion_rate": 0.04,
+    "jaw_open": 0.35,
+    "jaw_closed": 0.0
+  },
+  "base_pos": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "base_quat": [
+    1.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scene": {
+    "trocar": [
+      0.42,
+      0.0,
+      0.42
+    ],
+    "home_insertion": 0.15,
+    "wall_half_xy": [
+      0.2,
+      0.16
+    ],
+    "wall_thickness": 0.03,
+    "cavity_half_xy": [
+      0.17,
+      0.13
+    ],
+    "cavity_depth": 0.2,
+    "phantom_collision": false,
+    "floor": true
+  },
+  "joint_velocity_limits": [
+    2.0,
+    2.0,
+    2.5,
+    3.0,
+    3.0,
+    3.0
+  ],
+  "home_qpos": [
+    -3.466317,
+    -1.76835,
+    1.535994,
+    -1.33844,
+    -1.570796,
+    9e-06
+  ],
+  "sim_dt": 0.001,
+  "control_dt": 0.01
+}

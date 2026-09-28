@@ -1,0 +1,78 @@
+{
+  "name": "flexiv_rizon4",
+  "description": "Flexiv Rizon 4 (7 DOF, redundant) from MuJoCo Menagerie, carrying the SAS-Sim tom_dissector instrument. The instrument is mounted on the distal face of link7 at z = 0.081 m (end of the link7 mesh).",
+  "robot_xml": "assets/robots/flexiv_rizon4/flexiv_rizon4.xml",
+  "flange_body": "link7",
+  "instrument": {
+    "xml": "assets/instruments/tom_dissector/instrument.xml",
+    "mount_pos": [
+      0.0,
+      0.0,
+      0.081
+    ],
+    "mount_quat": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "nominal_length": 0.3,
+    "shaft_radius": 0.0035,
+    "min_insertion": 0.06,
+    "max_insertion": 0.25,
+    "insertion_rate": 0.04,
+    "jaw_open": 0.35,
+    "jaw_closed": 0.0
+  },
+  "base_pos": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "base_quat": [
+    1.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scene": {
+    "trocar": [
+      0.42,
+      0.0,
+      0.42
+    ],
+    "home_insertion": 0.15,
+    "wall_half_xy": [
+      0.2,
+      0.16
+    ],
+    "wall_thickness": 0.03,
+    "cavity_half_xy": [
+      0.17,
+      0.13
+    ],
+    "cavity_depth": 0.2,
+    "phantom_collision": false,
+    "floor": true
+  },
+  "joint_velocity_limits": [
+    1.8,
+    1.8,
+    2.2,
+    2.4,
+    2.6,
+    2.6,
+    2.6
+  ],
+  "home_qpos": [
+    0.05284,
+    0.218155,
+    0.193423,
+    2.063668,
+    0.043281,
+    0.278413,
+    -1.3e-05
+  ],
+  "sim_dt": 0.001,
+  "control_dt": 0.01
+}

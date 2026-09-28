@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot name="gripper">
+  <material name="metal">
+    <color rgba="0.7 0.7 0.7 1.0"/>
+  </material>
+
+  <material name="rubber">
+    <color rgba="0.1 0.1 0.1 1.0"/>
+  </material>
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.000108988198213866 0.0150637349714027 0.034737922321171"
+        rpy="0 0 0" />
+      <mass
+        value="0.126197099327978" />
+      <inertia
+        ixx="0.000126380144762793"
+        ixy="-1.10206153385678E-08"
+        ixz="2.78005539592273E-07"
+        iyy="9.14388156764594E-05"
+        iyz="1.20840381379242E-06"
+        izz="7.71495284272129E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/base_link.STL" />
+      </geometry>
+      <material name="metal"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="gripper_link">
+    <inertial>
+      <origin
+        xyz="7.86100729455869E-05 -0.000549324496472312 0.00373803056031818"
+        rpy="0 0 0" />
+      <mass
+        value="5.13688661749737E-02" />
+      <inertia
+        ixx="2.12475112788677E-09"
+        ixy="-7.76095028552687E-12"
+        ixz="-7.9716196478143E-11"
+        iyy="2.13340904932851E-09"
+        iyz="-1.53622683296432E-10"
+        izz="5.75046949735371E-11" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/gripper_link.STL" />
+      </geometry>
+      <material name="rubber"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/gripper_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="gripper_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0.3"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="gripper_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0.5"
+      effort="10"
+      velocity="1.0" />
+  </joint>
+  <link
+    name="mimic_Link">
+    <inertial>
+      <origin
+        xyz="-7.83876141366435E-05 0.000549803920175951 0.00373803641050918"
+        rpy="0 0 0" />
+      <mass
+        value="5.13688212985406E-02" />
+      <inertia
+        ixx="2.12476053896579E-09"
+        ixy="-7.75206914839629E-12"
+        ixz="7.95929067938625E-11"
+        iyy="2.13340895534297E-09"
+        iyz="1.53623876992453E-10"
+        izz="5.74953673512827E-11" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/mimic_Link.STL" />
+      </geometry>
+      <material name="rubber"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/mimic_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="mimic_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0.3"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="mimic_Link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.5"
+      upper="0"
+      effort="10"
+      velocity="1.0" />
+    <mimic
+      joint="gripper_joint"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+</robot>

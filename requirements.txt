@@ -1,0 +1,8 @@
+numpy>=1.24
+mujoco>=3.2
+# optional, used for cross-checking the QP solver and for plotting
+scipy>=1.10
+matplotlib>=3.7
+pytest>=7
+# optional, browser viewer (scripts/demo_viser.py)
+viser>=1.0
