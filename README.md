@@ -1,6 +1,10 @@
 # Virtual RCM: QP-Based Remote Center of Motion Control for General-Purpose Arms
 
 <p align="center">
+  <img src="figures/demo.gif" alt="Virtual RCM demo: UR5e and Flexiv Rizon 4 sweeping a surgical instrument around the RCM" width="100%">
+</p>
+
+<p align="center">
   <img src="figures/teaser.png" alt="Virtual RCM teaser" width="100%">
 </p>
 
@@ -196,6 +200,16 @@ python scripts/make_teaser.py
 The script regenerates [figures/teaser.png](figures/teaser.png) and
 [figures/teaser.pdf](figures/teaser.pdf) from the simulation and the logs in
 [results/](results/).
+
+### Demo Animation
+
+```bash
+python scripts/make_gif.py            # requires ffmpeg
+```
+
+The script renders [figures/demo.gif](figures/demo.gif): both arms sweep the
+instrument once around an 18° cone in dynamic simulation, with a close-up of the
+trocar showing the shaft axes pivoting about the RCM and a live RCM-error plot.
 
 ## Execution Modes
 
